@@ -10,6 +10,7 @@ description = "Properties for class attributes."
 readme = "README.md"
 requires-python = ">=3.6"
 license = "MIT"
+license-files = [ "LICENSE.txt" ]
 
 keywords = [
     "python",
@@ -44,7 +45,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.15",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
