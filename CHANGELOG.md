@@ -10,6 +10,7 @@ All major, minor and patch releases will be documented here, with details on add
 > ```
 > py -m pip install clsproperties --upgrade
 > ```
+> 
 > </details>
 > 
 > <details><summary>Unix / macOS</summary>
@@ -17,6 +18,7 @@ All major, minor and patch releases will be documented here, with details on add
 > ```
 > python3 -m pip install clsproperties --upgrade
 > ```
+> 
 > </details>
 
 ---
