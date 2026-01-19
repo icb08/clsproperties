@@ -23,6 +23,7 @@ __all__ = ["classproperty","ClassPropertyMeta"]
 
 class classproperty:
     """
+    Class property object.
     """
 
     def __init__(self,fget=None,fset=None,fdel=None,doc=None):
