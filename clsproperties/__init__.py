@@ -29,6 +29,26 @@ class classproperty:
 
     ---
 
+    ## Attributes / Properties
+    - **fget** (attribute) : *function*
+    > The getter function of the `classproperty` object.
+    - **fset** (attribute) : *function*
+    > The setter function of the `classproperty` object.
+    - **fdel** (attribute) : *function*
+    > The deleter function of the `classproperty` object.
+
+    ---
+
+    ## Methods / Functions
+    - **getter** (instance method)
+    > Define the getter function of the `classproperty` object.
+    - **setter** (instance method)
+    > Define the setter function of the `classproperty` object.
+    - **deleter** (instance method)
+    > Define the deleter function of the `classproperty` object.
+
+    ---
+
     ## Usage / Implementation
     
     The `classproperty` class aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable.
@@ -92,30 +112,12 @@ class classproperty:
     >>> instance.value
     ... 67
     ```
-    
-    ---
-
-    ## Attributes / Properties
-    - **fget** (attribute) : *function*
-    > The getter function of the `classproperty` object.
-    - **fset** (attribute) : *function*
-    > The setter function of the `classproperty` object.
-    - **fdel** (attribute) : *function*
-    > The deleter function of the `classproperty` object.
-
-    ---
-
-    ## Methods / Functions
-    - **getter** (instance method)
-    > Define the getter function of the `classproperty` object.
-    - **setter** (instance method)
-    > Define the setter function of the `classproperty` object.
-    - **deleter** (instance method)
-    > Define the deleter function of the `classproperty` object.
     """
 
     def __init__(self,fget=None,fset=None,fdel=None,doc=None):
-        """"""
+        """Instantiate a `classproperty` object.
+        
+        """
         self.fget = fget
         self.fset = fset
         self.fdel = fdel
