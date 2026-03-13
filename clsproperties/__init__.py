@@ -27,6 +27,8 @@ class classproperty:
 
     This class defines a `classproperty` descriptor, supporting getter, setter and deleter functions, that aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable.
 
+    For detailed information on usage and implementation, view the [Documentation](https://github.com/icb08/clsproperties/wiki/Documentation).
+
     ---
 
     ## Attributes / Properties
@@ -46,77 +48,27 @@ class classproperty:
     > Define the setter function of the `classproperty` object.
     - **deleter** (instance method)
     > Define the deleter function of the `classproperty` object.
-
-    ---
-
-    ## Usage / Implementation
-    
-    The `classproperty` class aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable.
-
-    In both cases, access to the `classproperty` attribute, via the class itself or via instances of the class, is mediated by the defined getter, setter and deleter functions.
-
-    Important: For the setter and deleter functions to be triggered when the `classproperty` attribute is accessed via the class itself, the `ClassPropertyMeta` class is required.
-
-    For detailed information on usage and implementation, view the [Documentation](https://github.com/icb08/clsproperties/wiki/Documentation).
-    
-    ### Decorator
-    
-    Like `property` objects, `classproperty` objects can be defined via a decorator defined on the class.
-
-    Example:
-
-    ```
-    class MyClass(metaclass=ClassPropertyMeta):
-        
-        _value = 67
-
-        @classproperty
-        def value(cls):
-            return _value
-        
-        @value.setter
-        def value(cls,newvalue):
-            cls._value = newvalue
-        
-    instance = MyClass()
-
-    >>> MyClass.value
-    ... 67
-    >>> instance.value
-    ... 67
-    ```
-
-    ### Callable
-
-    Like `property` objects, `classproperty` objects can also be instantiated by passing the getter, setter and deleter functions as arguments.
-
-    Example:
-
-    ```
-    class MyClass(metaclass=ClassPropertyMeta):
-        
-        _value = 67
-
-        def get_value(cls):
-            return cls._value
-        
-        def set_value(cls,newvalue):
-            cls._value = newvalue
-
-        value = classproperty(get_value,set_value)
-    
-    instance = MyClass()
-
-    >>> MyClass.value
-    ... 67
-    >>> instance.value
-    ... 67
-    ```
     """
 
     def __init__(self,fget=None,fset=None,fdel=None,doc=None):
-        """Instantiate a `classproperty` object.
+        """
+        Instantiate a `classproperty` object.
+
+        This method instantiates a `classproperty` descriptor, defining the getter, setter and deleter functions.
+
+        For detailed information on usage and implementation, view the [Documentation](https://github.com/icb08/clsproperties/wiki/Documentation).
         
+        ---
+
+        ## Parameters / Arguments
+        - **fget** (optional) : *function* (default=None)
+        > The getter function of the `classproperty` object.
+        - **fset** (optional) : *function* (default=None)
+        > The setter function of the `classproperty` object.
+        - **fdel** (optional) : *function* (default=None)
+        > The deleter function of the `classproperty` object.
+        - **doc** (optional) : *str* (default=None)
+        > Optional docstring for the `classproperty` object.
         """
         self.fget = fget
         self.fset = fset
@@ -142,6 +94,22 @@ class classproperty:
         return self.fdel(cls)
     
     def getter(self,fget):
+        """
+        Return a `classproperty` object with the defined getter function.
+
+        This method, typically used as a decorator, defines the getter function of a `classproperty` descriptor.
+
+        ---
+
+        ## Parameters / Arguments
+        - **fget** : *function*
+        > The getter function of the `classproperty` object.
+
+        ---
+
+        ## Returns
+        - *
+        """
         return type(self)(fget,self.fset,self.fdel,self.__doc__)
     
     def setter(self,fset):
