@@ -1,6 +1,5 @@
 """
 # clsproperties
-
 - **Author:** [Isaac Bell](https://github.com/icb08)
 - **Version:** [1.0.0](https://github.com/icb08/clsproperties/wiki/Changelog#1-0-0)
 
@@ -9,7 +8,6 @@ This library provides `classproperty` objects for controlled access to class att
 The `classproperty` class aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable. Like `property` objects, `classproperty` objects are descriptors, supporting getter, setter and deleter functions. 
 
 ## Links
-
 - **[Source Code](https://github.com/icb08/clsproperties)**
 - **[Issues](https://github.com/icb08/clsproperties/issues)**
 - **[Documentation](https://github.com/icb08/clsproperties/wiki/Documentation)**
@@ -95,9 +93,9 @@ class classproperty:
     
     def getter(self,fget):
         """
-        Return a `classproperty` object with the defined getter function.
+        Define the getter function of the `classproperty` object.
 
-        This method, typically used as a decorator, defines the getter function of a `classproperty` descriptor.
+        This method, typically used as a decorator, defines the getter function of the `classproperty` descriptor.
 
         ---
 
@@ -108,18 +106,71 @@ class classproperty:
         ---
 
         ## Returns
-        - *
+        - *`classproperty` object*
+        > Returns a new `classproperty` object, with the specified getter function.
         """
         return type(self)(fget,self.fset,self.fdel,self.__doc__)
     
     def setter(self,fset):
+        """
+        Define the setter function of the `classproperty` object.
+
+        This method, typically used as a decorator, defines the setter function of the `classproperty` descriptor.
+
+        ---
+
+        ## Parameters / Arguments
+        - **fset** : *function*
+        > The setter function of the `classproperty` object.
+
+        ---
+
+        ## Returns
+        - *`classproperty` object*
+        > Returns a new `classproperty` object, with the specified setter function.
+        """
         return type(self)(self.fget,fset,self.fdel,self.__doc__)
     
     def deleter(self,fdel):
+        """
+        Define the deleter function of the `classproperty` object.
+
+        This method, typically used as a decorator, defines the deleter function of the `classproperty` descriptor.
+
+        ---
+
+        ## Parameters / Arguments
+        - **fdel** : *function*
+        > The deleter function of the `classproperty` object.
+
+        ---
+
+        ## Returns
+        - *`classproperty` object*
+        > Returns a new `classproperty` object, with the specified deleter function.
+        """
         return type(self)(self.fget,self.fset,fdel,self.__doc__)
     
 class ClassPropertyMeta(type):
-    """"""
+    """
+    Class property metaclass. UNFINISHED DOCSTRING.
+
+    This class defines a metaclass, that enables execution of the setter and deleter functionintercepts class attribute assignment and deletion operations and redirects them to the corresponding setter and deleter functions of `classproperty` objects.
+
+    This class should be used as the metaclass for classes which define `classproperty` objects, if the setter and deleter functions of the `classproperty` objects should be executed when accessed via the class itself, instead of overriding the `classproperty` object.
+    
+    For detailed information on usage and implementation, view the [Documentation](https://github.com/icb08/clsproperties/wiki/Documentation).
+
+    ---
+
+    ## Attributes / Properties
+    N/A
+
+    ---
+
+    ## Methods / Functions
+    N/A
+    """
 
     def __setattr__(cls,name,value):
         attr = cls.__dict__.get(name)
