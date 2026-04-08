@@ -1,6 +1,6 @@
 # clsproperties
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **Version:** [1.0.0](https://github.com/icb08/clsproperties/wiki/Changelog#1-0-0)
+- **Version:** [1.0.1](https://github.com/icb08/clsproperties/wiki/Changelog#1-0-1)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
