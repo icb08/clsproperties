@@ -155,11 +155,7 @@ class ClassPropertyMeta(type):
     """
     Class property metaclass.
 
-    This class defines a metaclass, that enables full functionality of `classproperty` objects defined in classes, whose metaclass is `ClassPropertyMeta`, by enabling class-level attribute assignment and deletion operations of `classproperty` objects to execute the corresponding setter and deleter functions of the `classproperty` object, instead of overriding the `classproperty` object. UNFINISHED.
-    
-    Like `property` objects, class-level attribute assignment operations (e.g. `ClassName.class_attribute = x`) would override the `classproperty` object (e.g. if `ClassName.class_attribute` was a `classproperty` object, then `ClassName.class_attribute = x` would replace the `classproperty` object with `x`, instead of executing the setter function of the `classproperty` object). This metaclass intercepts the class attribute assignment operations via the class, and executes the corresponding setter function of the `classproperty` object.
-    
-    Like `property` objects, class-level attribute deletion operations (e.g. `del ClassName.class_attribute`) would delete the `classproperty` object (e.g. if `ClassName.class_attribute` was a `classproperty` object, then `del ClassName.class_attribute` would delete the `classproperty` object with `x`, instead of executing the deleter function of the `classproperty` object). This metaclass intercepts the class attribute deletion operations via the class, and executes the corresponding deleter function of the `classproperty` object.
+    This class defines a metaclass, that enables full functionality of `classproperty` objects defined in classes, whose metaclass is `ClassPropertyMeta`. This metaclass intercepts class attribute assignment and deletion operations of `classproperty` objects, and executes the corresponding setter and deleter functions of the `classproperty` objects.
     
     For detailed information on usage and implementation, view the [Documentation](https://github.com/icb08/clsproperties/wiki/Documentation).
 
