@@ -1,13 +1,10 @@
 name: Publish Python Package to PyPi on Release
 
-# Executes workflow when a release is published.
 on:
   release:
     types: [published]
 
 jobs:
-
-  # First job sets up a linux machine to build the .tar.gz and .whl python package files.
   build:
     runs-on: ubuntu-latest
 
@@ -32,7 +29,6 @@ jobs:
           name: package-dist
           path: dist/
 
-  # Second job sets up a linux machine to download the package files (artifacts) and upload to PyPi.
   publish:
     needs: build
     runs-on: ubuntu-latest
