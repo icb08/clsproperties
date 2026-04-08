@@ -66,5 +66,3 @@ License = "https://github.com/icb08/clsproperties/blob/main/LICENSE"
 
 [tool.hatch.version]
 path = "clsproperties/__init__.py"
-
-# [project.optional-dependencies] \n colors = ["colorama>=0.4"]
