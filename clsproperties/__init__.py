@@ -16,7 +16,7 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 """
 
 __author__ = "Isaac Bell"
-__version__ = "1.0.0"
+__version__ = "0.1.0" # For testing on TestPyPi. No documentation has been changed to 0.1.0. Change to 1.0.0 for actual release.
 __all__ = ["classproperty","ClassPropertyMeta"]
 
 class classproperty:
