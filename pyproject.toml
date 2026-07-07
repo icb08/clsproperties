@@ -1,12 +1,12 @@
 [project]
 name = "clsproperties"
-authors = [ { name = "Isaac Bell" } ]
+authors = [{name = "Isaac Bell"}]
 dynamic = ["version"]
 description = "This library provides classproperty objects for controlled access to class attributes."
 readme = "README.md"
 requires-python = ">=3.6"
 license = "MIT"
-license-files = [ "LICENSE.txt" ]
+license-files = ["LICENSE.txt"]
 
 keywords = [
     "python",
@@ -66,3 +66,10 @@ build-backend = "hatchling.build"
 
 [tool.hatch.version]
 path = "src/clsproperties.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
+
+[tool.hatch.build.targets.wheel]
+sources = ["src"]
+include = ["src/clsproperties.py"]
