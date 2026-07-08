@@ -1,7 +1,7 @@
 This is the full documentation for the `clsproperties` library. Details on the installation, importation and implementation of the library will be documented here.
 
 > [!NOTE]
-> ## Contents
+> Skip to the relevant section:
 > 
 > - **[Installation](#Installation)**
 > - **[Importation](#Importation)**
