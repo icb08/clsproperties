@@ -1,7 +1,7 @@
 """
 # clsproperties
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **Version:** [1.0.3](https://github.com/icb08/clsproperties/wiki/Changelog#1-0-3)
+- **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
@@ -10,13 +10,13 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 ## Links
 - **[Source Code](https://github.com/icb08/clsproperties)**
 - **[Issues](https://github.com/icb08/clsproperties/issues)**
-- **[Documentation](https://github.com/icb08/clsproperties/wiki/Documentation)**
-- **[Changelog](https://github.com/icb08/clsproperties/wiki/Changelog)**
+- **[Documentation](https://github.com/icb08/clsproperties/blob/main/docs/Documentation)**
+- **[Changelog](https://github.com/icb08/clsproperties/releases)**
 - **[License](https://github.com/icb08/clsproperties/blob/main/LICENSE)**
 """
 
 __author__ = "Isaac Bell"
-__version__ = "1.0.3"
+__version__ = "1.0.0"
 __all__ = ["classproperty","ClassPropertyMeta"]
 
 class classproperty:
