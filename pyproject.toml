@@ -65,11 +65,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/clsproperties.py"
-
-[tool.hatch.build.targets.sdist]
-exclude = ["/.github"]
-
-[tool.hatch.build.targets.wheel]
-sources = ["src"]
-include = ["src/clsproperties.py"]
+path = "src/clsproperties/__init__.py"
