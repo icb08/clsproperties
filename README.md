@@ -1,6 +1,6 @@
 # clsproperties
+- **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.6+](https://www.python.org/downloads/))
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0)
 - **License:** [MIT](LICENSE.txt)
 
 This library provides `classproperty` objects for controlled access to class attributes.
@@ -11,23 +11,25 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 
 # Links
 
-## [Source Code](https://github.com/icb08/clsproperties)
+## [Documentation](docs
 
-> This is the GitHub repository containing the source code for the `clsproperties` library. All source folders and files, and their entire commit history is documented here.
+## [Repository](https://github.com/icb08/clsproperties)
+
+> This is the GitHub Repository containing the source code for the `clsproperties` library. All source folders and files of the library, and their entire commit history are documented here.
 
 ## [Releases](https://github.com/icb08/clsproperties/releases)
 
-> This is the
+> This is the GitHub Releases Page (changelog) for the `clsproperties` library. All source files, distribution files, and release notes, for major, minor and patch releases of the library, are documented here.
 
 ## [Issues](https://github.com/icb08/clsproperties/issues)
 
-> This is the GitHub issue tracker
+> This is the GitHub Issues Page (bug tracker) for the `clsproperties` library. Any feedback (suggestions / issues / bugs) for the library can be documented here.
 
 ---
 
 # Documentation
 
-This is the full documentation for the `clsproperties` library. All details on the installation and usage of the library will be documented here.
+This is the full documentation for the `clsproperties` library. All details on the installation, importation and implementation of the library will be documented here.
 
 > [!NOTE]
 > Skip to the relevant section:
@@ -65,7 +67,7 @@ To use this library, it must first be installed.
 > > 
 > > </details>
 > > 
-> > This library requires Python version 3.6 or later. If you have an older version of Python and want to update it, install a later version from https://python.org/
+> > This library requires Python version 3.6 or later. If you have an older version of Python and want to update it, install a later version [here](https://python.org/).
 
 ### Installing clsproperties
 
