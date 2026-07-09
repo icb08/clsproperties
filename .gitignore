@@ -1,7 +1,75 @@
-# Byte-compiled Code / Extensions Cache
+# Log / Backup / Original / Temporary / Dump Files
+*.log
+*.bak
+*.back
+*.backup
+*.ori
+*.orig
+*.original
+*.tmp
+*.temp
+*.temporary
+~$*
+*.dmp
+*.stackdump
+
+# Windows Junk (Shortcuts / Recycle Bin / Thumbnail Cache / Folder Config)
+*.lnk
+$RECYCLE.BIN/
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+
+# Runtime Artifacts (Byte-compiled Code/Library Cache/Translations)
 __pycache__/
 *.py[codz]
 *$py.class
 *.so
+*.mo
+*.pot
 
-# Building / Distribution
+# Environment (Environment Variables / Virtual Environments)
+.env
+.envrc
+*.env
+.venv/
+env/
+venv/
+.uv/
+.uv_cache/
+.uv-cache/
+# Environment Dependencies (HASH FOR APPLICATIONS, UNHASH FOR LIBRARIES)
+*.lock
+.python-version
+
+# Packaging / Distribution (Hatchling & PyInstaller Build Artifacts)
+build/
+dist/
+sdist/
+wheels/
+.hatch/
+*.egg
+*.egg-info/
+*.manifest
+*.spec
+
+# Testing
+.tox/
+.nox/
+htmlcov/
+.coverage
+.coverage.*
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE (VSCode)
+.vscode/
+
+# Jupyter Notebooks / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
