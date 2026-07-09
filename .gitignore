@@ -10,6 +10,7 @@
 *.temp
 *.temporary
 ~$*
+.TemporaryItems/
 *.dmp
 *.stackdump
 
@@ -21,6 +22,17 @@ Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
 [Dd]esktop.ini
+
+# MacOS Junk (Trashes / Icons / Folder Config)
+.Trashes
+Icon?
+.DS_Store
+._*
+.AppleDouble
+.localized
+.LSOverride
+.Spotlight-V100
+.fseventsd
 
 # Runtime Artifacts (Byte-compiled Code/Library Cache/Translations)
 __pycache__/
