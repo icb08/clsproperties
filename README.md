@@ -11,7 +11,7 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 
 # Links
 
-## [Documentation](docs
+## [Documentation](docs/index.md)
 
 ## [Repository](https://github.com/icb08/clsproperties)
 
