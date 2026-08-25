@@ -1,4 +1,4 @@
-# This Github Workflow automatically publishes Python Libraries (specifically Python Packages as Python Modules can't be uploaded via PyPi) to PyPi, whenever a Release of the Github Repository (containing the Python Library) is published.
+# This Github Actions Workflow automatically publishes Python Libraries to PyPi, whenever a Release of the Github Repository (containing the Python Library) is published.
 name: Publish Python Library to PyPi on Release
 
 # Specifies that the Github Workflow is only to be executed when a Release of the Github Repository (containing the Python Library) is published.
