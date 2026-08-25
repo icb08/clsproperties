@@ -1,12 +1,12 @@
-# This Github Actions Workflow automatically publishes Python Libraries to PyPi, whenever a Release of the Github Repository (containing the Python Library) is published.
+# This GitHub Actions Workflow (for GitHub Repositories containing the Source Code of a Python Library) automatically builds the Python Library into a Distribution Package and then publishes that Distribution Package to PyPI, whenever a Release of the GitHub Repository is published.
 name: Publish Python Library to PyPi on Release
 
-# Specifies that the Github Workflow is only to be executed when a Release of the Github Repository (containing the Python Library) is published.
+# Specifies that the GitHub Workflow is only to be executed when a Release of the GitHub Repository (containing the Python Library) is published.
 on:
   release:
     types: [published]
 
-# Defines the processes of the Github Workflow that build and publish the Python Library.
+# Defines the processes of the GitHub Workflow that build and publish the Python Library.
 jobs:
 
   # Job 1: Builds the Python Package, converting the source distribution (.py files with a pyproject.toml file for metadata) into a wheel distribution (a .tar.gz file and a .whl file) so that it is ready to be distributed.
@@ -15,7 +15,7 @@ jobs:
 
     # Defines the steps to complete Job 1.
     steps:
-      - name: Download Github Repository Content to Machine
+      - name: Download GitHub Repository Content to Machine
         uses: actions/checkout@v4
 
       - name: Set up Python Environment on Machine
@@ -29,7 +29,7 @@ jobs:
       - name: Build Package
         run: python -m build
 
-      # Uploads the artifacts (virtual files produced during the workflow operation - A.K.A the Python package wheel distribution files) to Github so that it can be used by other jobs.
+      # Uploads the artifacts (virtual files produced during the workflow operation - A.K.A the Python package wheel distribution files) to GitHub so that it can be used by other jobs.
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -41,13 +41,13 @@ jobs:
     needs: build # Specifies that the Python Package must be built before Job 2 commences.
     runs-on: ubuntu-latest # Creates a virtual Linux machine to complete Job 2 on.
 
-    # Grants the permissions needed by the Github Workflow to access the security token to upload to PyPi.
+    # Grants the permissions needed by the GitHub Workflow to access the security token to upload to PyPi.
     permissions:
       id-token: write
 
     # Defines the steps to complete Job 2.
     steps:
-      # Downloads the artifacts (virtual files produced during another workflow operation - A.K.A the Python package wheel distribution files) previously uploaded to Github in Job 1 to the virtual Linux machine so that they can be used in Job 2.
+      # Downloads the artifacts (virtual files produced during another workflow operation - A.K.A the Python package wheel distribution files) previously uploaded to GitHub in Job 1 to the virtual Linux machine so that they can be used in Job 2.
       - name: Download Build Artifacts to Machine
         uses: actions/download-artifact@v4
         with:
