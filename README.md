@@ -1,7 +1,7 @@
 # clsproperties
 - **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.6+](https://www.python.org/downloads/))
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **License:** [MIT](LICENSE.txt)
+- **License:** [MIT](LICENSE)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
