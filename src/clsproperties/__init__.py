@@ -180,7 +180,6 @@ class ClassPropertyMeta(type):
     def __delattr__(cls, name):
         attr = cls.__dict__.get(name)
         if isinstance(attr, classproperty):
-        if isinstance(attr, classproperty):
             if attr.fdel is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no deleter.")
             return attr.fdel(cls)
         super().__delattr__(name)
