@@ -1,114 +1,42 @@
 # clsproperties
 - **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.6+](https://www.python.org/downloads/))
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **License:** [MIT](LICENSE)
+- **License:** [MIT](https://github.com/icb08/clsproperties/blob/v1.0.0/LICENSE)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
 The `classproperty` class aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable. Like `property` objects, `classproperty` objects are descriptors, supporting getter, setter and deleter functions. 
 
----
+### Links
 
-# Links
+**[Documentation](https://icb08.github.io/clsproperties/documentation)**
 
-## [Documentation](docs/index.md)
+> This is the GitHub Pages site containing the full documentation for the `clsproperties` library. All guides, examples and references for the installation and implementation of the library are documented here.
 
-## [Repository](https://github.com/icb08/clsproperties)
+**[Repository](https://github.com/icb08/clsproperties)**
 
-> This is the GitHub Repository containing the source code for the `clsproperties` library. All source folders and files of the library, and their entire commit history are documented here.
+> This is the GitHub Repository containing the source code for the `clsproperties` library. All source directories and files of the library, and their entire commit history are documented here.
 
-## [Releases](https://github.com/icb08/clsproperties/releases)
+**[Releases](https://github.com/icb08/clsproperties/releases)**
 
 > This is the GitHub Releases Page (changelog) for the `clsproperties` library. All source files, distribution files, and release notes, for major, minor and patch releases of the library, are documented here.
 
-## [Issues](https://github.com/icb08/clsproperties/issues)
-
-> This is the GitHub Issues Page (bug tracker) for the `clsproperties` library. Any feedback (suggestions / issues / bugs) for the library can be documented here.
-
 ---
 
-# Documentation
+## Contribution
 
-This is the full documentation for the `clsproperties` library. All details on the installation, importation and implementation of the library will be documented here.
+This library is a solo project, developed and maintained by a student, for the purpose of learning Python and the software development environment.
 
-> [!NOTE]
-> Skip to the relevant section:
-> 
-> - **[Installation](#Installation)**
-> - **[Importation](#Importation)**
-> - **[Implementation](#Implementation)**
+As an open source project, any community contributions are greatly appreciated! Please always be respectful towards others and the project.
 
----
+Keep in mind that it may take some time for issues and pull requests to be reviewed, and that some requests may be denied due to the strict code and documentation standards I have set for myself. Also, please try to use official issue templates.
 
-## Installation
+### Links
 
-To use this library, it must first be installed.
+**[Issues](https://github.com/icb08/clsproperties/issues)**
 
-> [!IMPORTANT]
-> 
-> ### Requirements
-> 
-> - **Python 3.6+**
-> > To check your Python version, run the following command in the Python console:
-> > 
-> > <details open><summary>Windows</summary>
-> > 
-> > ```
-> > py --version
-> > ```
-> > 
-> > </details>
-> > 
-> > <details><summary>Unix / macOS</summary>
-> > 
-> > ```
-> > python3 --version
-> > ```
-> > 
-> > </details>
-> > 
-> > This library requires Python version 3.6 or later. If you have an older version of Python and want to update it, install a later version [here](https://python.org/).
+> This is the GitHub Issues Page (bug tracker) for the `clsproperties` library. Any feedback (problems / suggestions) or questions about the library can be sent here.
 
-### Installing clsproperties
+**[Pull Requests](https://github.com/icb08/clsproperties/pulls)**
 
-To install this library, run the following command in the Python console:
-
-<details open><summary>Windows</summary>
-
-```
-py -m pip install clsproperties
-```
-
-</details>
-
-<details><summary>Unix / macOS</summary>
-
-```
-python3 -m pip install clsproperties
-```
-
-</details>
-
-### Updating clsproperties
-To update an older version of this library, run the following command in the Python console:
-
-<details open><summary>Windows</summary>
-
-```
-py -m pip install clsproperties --upgrade
-```
-
-</details>
-
-<details><summary>Unix / macOS</summary>
-
-```
-python3 -m pip install clsproperties --upgrade
-```
-
-</details>
-
----
-
-## Importation
-Once installed, to use this library, it must be imported. This can be done in 3 ways.
+> This is the GitHub Pull Requests Page for the `clsproperties` library. Any code suggestions for the library can be sent here.
