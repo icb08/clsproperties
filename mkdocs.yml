@@ -1,0 +1,50 @@
+site_name: clsproperties
+site_url: https://icb08.github.io/clsproperties/
+repo_name: clsproperties
+repo_url: https://github.com/icb08/clsproperties
+
+plugins:
+  - search
+  - mike
+  - gh-admonitions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - markdown_include.include:
+      base_path: .
+
+extra_css: 
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Getting Started: documentation.md
+  - Guides:
+    - Installation: guides/installation.md
+    - Importation: guides/importation.md
+  - Examples:
+    - examples/Test2.md
+  - References:
+    - Classes: references/classes.md
+
+theme: 
+  name: material
+  icon:
+    logo: fontawesome/solid/book
+    repo: octicons/mark-github-16
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      toggle:
+        icon: material/weather-night
+        name: Dark Mode
+      primary: custom
+      accent: custom
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      toggle:
+        icon: material/weather-sunny
+        name: Light Mode
+      primary: custom
+      accent: custom

@@ -1,0 +1,9 @@
+name: Generate Documentation
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    idk:
+        runs-on: ubuntu-latest
