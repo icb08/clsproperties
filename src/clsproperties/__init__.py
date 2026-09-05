@@ -48,7 +48,7 @@ class classproperty:
     > Define the deleter function of the `classproperty` object.
     """
 
-    def __init__(self,fget=None,fset=None,fdel=None,doc=None):
+    def __init__(self, fget: function = None, fset: function = None, fdel: function = None, doc: str = None):
         """
         Instantiate a `classproperty` object.
 
@@ -59,13 +59,13 @@ class classproperty:
         ---
 
         ## Parameters / Arguments
-        - **fget** (optional) : *function* (default=None)
+        - **fget** (optional) : *function* (default = None)
         > The getter function of the `classproperty` object.
-        - **fset** (optional) : *function* (default=None)
+        - **fset** (optional) : *function* (default = None)
         > The setter function of the `classproperty` object.
-        - **fdel** (optional) : *function* (default=None)
+        - **fdel** (optional) : *function* (default = None)
         > The deleter function of the `classproperty` object.
-        - **doc** (optional) : *str* (default=None)
+        - **doc** (optional) : *str* (default = None)
         > Optional docstring for the `classproperty` object.
         """
         self.fget = fget
@@ -73,25 +73,25 @@ class classproperty:
         self.fdel = fdel
         self.__doc__ = doc or (fget.__doc__ if fget else None)
 
-    def __set_name__(self,cls,name):
+    def __set_name__(self, cls, name):
         self.__name__ = name
     
-    def __get__(self,instance,cls=None):
+    def __get__(self, instance, cls=None):
         if cls is None: cls = type(instance)
         if self.fget is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no getter.")
         return self.fget(cls)
     
-    def __set__(self,instance,value):
+    def __set__(self, instance, value):
         cls = type(instance)
         if self.fset is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no setter.")
-        return self.fset(cls,value)
+        return self.fset(cls, value)
     
-    def __delete__(self,instance):
+    def __delete__(self, instance):
         cls = type(instance)
         if self.fdel is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no deleter.")
         return self.fdel(cls)
     
-    def getter(self,fget):
+    def getter(self, fget):
         """
         Define the getter function of the `classproperty` object.
 
@@ -109,9 +109,9 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified getter function.
         """
-        return type(self)(fget,self.fset,self.fdel,self.__doc__)
+        return type(self)(fget, self.fset, self.fdel, self.__doc__)
     
-    def setter(self,fset):
+    def setter(self, fset):
         """
         Define the setter function of the `classproperty` object.
 
@@ -129,9 +129,9 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified setter function.
         """
-        return type(self)(self.fget,fset,self.fdel,self.__doc__)
+        return type(self)(self.fget, fset, self.fdel, self.__doc__)
     
-    def deleter(self,fdel):
+    def deleter(self, fdel):
         """
         Define the deleter function of the `classproperty` object.
 
@@ -149,7 +149,7 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified deleter function.
         """
-        return type(self)(self.fget,self.fset,fdel,self.__doc__)
+        return type(self)(self.fget, self.fset, fdel, self.__doc__)
     
 class ClassPropertyMeta(type):
     """
@@ -170,16 +170,16 @@ class ClassPropertyMeta(type):
     N/A
     """
 
-    def __setattr__(cls,name,value):
+    def __setattr__(cls, name, value):
         attr = cls.__dict__.get(name)
-        if isinstance(attr,classproperty):
+        if isinstance(attr, classproperty):
             if attr.fset is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no setter.")
-            return attr.fset(cls,value)
-        super().__setattr__(name,value)
-    
+            return attr.fset(cls, value)
+        super().__setattr__(name, value)
+
     def __delattr__(cls, name):
         attr = cls.__dict__.get(name)
-        if isinstance(attr,classproperty):
+        if isinstance(attr, classproperty):
             if attr.fdel is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no deleter.")
             return attr.fdel(cls)
         super().__delattr__(name)
