@@ -68,10 +68,10 @@ class classproperty:
         - **doc** (optional) : *str* (default = None)
         > Optional docstring for the `classproperty` object.
         """
-        self.fget = fget
-        self.fset = fset
-        self.fdel = fdel
-        self.__doc__ = doc or (fget.__doc__ if fget else None)
+        self.fget = fget.__func__ if isinstance(fget, (classmethod, staticmethod)) else fget
+        self.fset = fset.__func__ if isinstance(fset, (classmethod, staticmethod)) else fset
+        self.fdel = fdel.__func__ if isinstance(fdel, (classmethod, staticmethod)) else fdel
+        self.__doc__ = doc or (self.fget.__doc__ if self.fget else None)
 
     def __set_name__(self,  cls,  name):
         self.__name__ = name
