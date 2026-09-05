@@ -17,7 +17,7 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 
 __author__ = "Isaac Bell"
 __version__ = "1.0.0"
-__all__ = ["classproperty","ClassPropertyMeta"]
+__all__ = ["classproperty", "ClassPropertyMeta"]
 
 class classproperty:
     """
@@ -73,25 +73,25 @@ class classproperty:
         self.fdel = fdel
         self.__doc__ = doc or (fget.__doc__ if fget else None)
 
-    def __set_name__(self, cls, name):
+    def __set_name__(self,  cls,  name):
         self.__name__ = name
     
-    def __get__(self, instance, cls=None):
+    def __get__(self,  instance,  cls=None):
         if cls is None: cls = type(instance)
         if self.fget is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no getter.")
         return self.fget(cls)
     
-    def __set__(self, instance, value):
+    def __set__(self,  instance,  value):
         cls = type(instance)
         if self.fset is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no setter.")
         return self.fset(cls, value)
     
-    def __delete__(self, instance):
+    def __delete__(self,  instance):
         cls = type(instance)
         if self.fdel is None: raise AttributeError(f"Class property '{self.__name__}' of '{cls.__name__}' object has no deleter.")
         return self.fdel(cls)
     
-    def getter(self, fget):
+    def getter(self,  fget):
         """
         Define the getter function of the `classproperty` object.
 
@@ -109,9 +109,9 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified getter function.
         """
-        return type(self)(fget, self.fset, self.fdel, self.__doc__)
+        return type(self)(fget,  self.fset,  self.fdel,  self.__doc__)
     
-    def setter(self, fset):
+    def setter(self,  fset):
         """
         Define the setter function of the `classproperty` object.
 
@@ -129,9 +129,9 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified setter function.
         """
-        return type(self)(self.fget, fset, self.fdel, self.__doc__)
+        return type(self)(self.fget,  fset,  self.fdel,  self.__doc__)
     
-    def deleter(self, fdel):
+    def deleter(self,  fdel):
         """
         Define the deleter function of the `classproperty` object.
 
@@ -149,7 +149,7 @@ class classproperty:
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified deleter function.
         """
-        return type(self)(self.fget, self.fset, fdel, self.__doc__)
+        return type(self)(self.fget,  self.fset,  fdel,  self.__doc__)
     
 class ClassPropertyMeta(type):
     """
@@ -170,15 +170,16 @@ class ClassPropertyMeta(type):
     N/A
     """
 
-    def __setattr__(cls, name, value):
+    def __setattr__(cls,  name,  value):
         attr = cls.__dict__.get(name)
-        if isinstance(attr, classproperty):
+        if isinstance(attr,  classproperty):
             if attr.fset is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no setter.")
             return attr.fset(cls, value)
         super().__setattr__(name, value)
 
     def __delattr__(cls, name):
         attr = cls.__dict__.get(name)
+        if isinstance(attr, classproperty):
         if isinstance(attr, classproperty):
             if attr.fdel is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no deleter.")
             return attr.fdel(cls)
