@@ -8,6 +8,8 @@ type: Bug
 
 ---
 
+BEFORE YOU REPORT A BUG, ENSURE YOU ARE USING THE LATEST VERSION OF THE LIBRARY.
+
 ## Python Version
 What Python version did this bug occur on?
 e.g. 3.6.15
