@@ -1,4 +1,5 @@
-name: Generate Documentation
+
+name: Deploy Documentation to GitHub Pages on Release
 
 on:
     release:

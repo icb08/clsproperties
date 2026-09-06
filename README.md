@@ -1,7 +1,7 @@
 # clsproperties
 - **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.6+](https://www.python.org/downloads/))
 - **Author:** [Isaac Bell](https://github.com/icb08)
-- **License:** [MIT](https://github.com/icb08/clsproperties/blob/v1.0.0/LICENSE)
+- **License:** [MIT](https://github.com/icb08/clsproperties/blob/main/LICENSE)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
@@ -9,7 +9,7 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 
 ## Links
 
-### [Documentation](https://icb08.github.io/clsproperties/documentation)
+### [Documentation](https://icb08.github.io/clsproperties/v1.0.0/documentation)
 
 > This is the GitHub Pages site containing the full documentation for the `clsproperties` library. All guides, examples and references for the installation and implementation of the library are documented here.
 

@@ -6,7 +6,7 @@ description = "This library provides classproperty objects for controlled access
 readme = "README.md"
 requires-python = ">=3.6"
 license = "MIT"
-license-files = ["LICENSE.txt"]
+license-files = ["LICENSE"]
 keywords = [
     "python",
     "python3",
@@ -84,11 +84,11 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/icb08/clsproperties/blob/main/docs/Documentation"
-Source = "https://github.com/icb08/clsproperties"
-Releases = "https://github.com/icb08/clsproperties/releases"
+Homepage = "https://icb08.github.com/clsproperties/v1.0.0/"
+Documentation = "https://icb08.github.io/clsproperties/v1.0.0/documentation"
+Repository = "https://github.com/icb08/clsproperties/tree/v1.0.0"
+Release Notes = "https://github.com/icb08/clsproperties/releases/tag/v1.0.0"
 Issues = "https://github.com/icb08/clsproperties/issues"
-License = "https://github.com/icb08/clsproperties/blob/main/LICENSE"
 
 [build-system]
 requires = ["hatchling"]
