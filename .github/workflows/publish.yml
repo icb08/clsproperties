@@ -1,59 +1,74 @@
 # This GitHub Actions Workflow (for GitHub Repositories containing the Source Code of a Python Library) automatically builds the Python Library into a Distribution Package and then publishes that Distribution Package to PyPI, whenever a Release of the GitHub Repository is published.
 name: Publish Python Library to PyPi on Release
 
-# Triggers the Workflow when a Release of the Repository is published.
+# Triggers the execution of the Workflow Jobs when a Release of the Repository is published.
 on:
   release:
     types: [published]
 
-# Defines the processes of the Workflow that build and publish the Python Library.
+# Defines the Workflow Jobs (execution processes) that build the Python Library into a Distribution Package and then publish that Distribution Package to PyPI.
 jobs:
 
-  # Job 1: Builds the Python Package, converting the source distribution (.py files with a pyproject.toml file for metadata) into a wheel distribution (a .tar.gz file and a .whl file) so that it is ready to be distributed.
+  # Job 1 - Builds the Python Library (Source Code and Metadata Files in the GitHub Repository) into a Distribution Package (a Source Distribution Package (.tar.gz) and a Wheel Distribution Package (.whl)).
   build:
-    runs-on: ubuntu-latest # Creates a virtual Linux machine to complete Job 1 on.
+    # Creates a Linux Runner (a new Virtual Machine with a Linux OS and some basic programming languages installed) and opens the Runner Workspace (completely empty directory) to complete Job 1 in.
+    runs-on: ubuntu-latest
 
-    # Defines the steps to complete Job 1.
+    # Defines the Steps (individual processes) to complete Job 1.
     steps:
-      - name: Download GitHub Repository Content to Machine
+      # Creates a Shallow Clone of the latest Commit of the GitHub Repository in the Runner Workspace, by initialising a Git Repository in the Runner Workspace (with Remote Origin set to the GitHub Repository) and fetching and checking out (downloading and extracting) the latest GitHub Repository Commit to the Runner Workspace so the Runner can access the files.
+      - name: Checkout GitHub Repository
         uses: actions/checkout@v7
 
-      - name: Set up Python Environment on Machine
-        uses: actions/setup-python@v5
+      # Sets up a Python Environment (with the latest Python 3 version) in the Runner Workspace.
+      - name: Set up Python Environment
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
-      - name: Install Package Builder to Python Environment
+      # Installs (or updates if pre-installed on the Runner) the latest version of the Python Package Build Frontend to the Python Environment.
+      - name: Install Python Package Build Frontend to Python Environment
         run: python -m pip install --upgrade build
 
+      # Builds the Python Library into a Distribution Package, which is stored in a dist/ directory in the Runner Workspace.
       - name: Build Package
         run: python -m build
 
-      # Uploads the artifacts (virtual files produced during the workflow operation - A.K.A the Python package wheel distribution files) to GitHub so that it can be used by other jobs.
+      # Uploads the Distribution Package in the dist/ directory in the Runner Workspace to GitHub as an Artifact called package-dist, so it can be accessed by the Runner in Job 2.
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: package-dist
           path: dist/
 
-  # Job 2: Uploads the Python Package to PyPi
+  # Job 2 - Uploads the Python Distribution Package to the GitHub Release (that triggered the Workflow) and to PyPI (Python Packaging Index).
   publish:
-    needs: build # Specifies that the Python Package must be built before Job 2 commences.
-    runs-on: ubuntu-latest # Creates a virtual Linux machine to complete Job 2 on.
+    # Prevents the Job from executing until Job 1 is complete.
+    needs: build
+    # Creates a Linux Runner and opens the Runner Workspace to complete Job 2 in.
+    runs-on: ubuntu-latest
 
-    # Grants the permissions needed by the GitHub Workflow to access the security token to upload to PyPi.
+    # Grants the Workflow Permission to write to the GitHub Release and to request the OIDC (OpenID Connect) Security Token from GitHub to be able to upload to PyPI.
     permissions:
+      contents: write
       id-token: write
 
-    # Defines the steps to complete Job 2.
+    # Defines the Steps to complete Job 2.
     steps:
-      # Downloads the artifacts (virtual files produced during another workflow operation - A.K.A the Python package wheel distribution files) previously uploaded to GitHub in Job 1 to the virtual Linux machine so that they can be used in Job 2.
+      # Downloads the Distribution Package Artifact from GitHub (uploaded in Job 1), and extracts it to the dist/ folder in the Runner Workspace, so it can be accessed by thr Runner in Job 2.
       - name: Download Build Artifacts to Machine
         uses: actions/download-artifact@v8
         with:
           name: package-dist
           path: dist/
 
+      # Uploads the Distribution Package ((stored in the dist/ directory in the Runner Workspace) to the GitHub Release (that triggered the Workflow).
+      - name: Upload to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} dist/*
+
+      # Publishes the Distribution Package (stored in the dist/ directory in the Runner Workspace) to PyPI.
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
