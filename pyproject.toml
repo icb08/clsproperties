@@ -84,11 +84,8 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://icb08.github.io/clsproperties/v1.0.0/"
-Documentation = "https://icb08.github.io/clsproperties/v1.0.0/documentation/"
+Homepage = "https://icb08.github.io/clsproperties/"
 Repository = "https://github.com/icb08/clsproperties"
-ReleaseNotes = "https://github.com/icb08/clsproperties/releases"
-Issues = "https://github.com/icb08/clsproperties/issues"
 
 [build-system]
 requires = ["hatchling"]
