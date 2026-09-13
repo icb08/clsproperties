@@ -22,8 +22,3 @@ class TestClassProperty:
         ExampleClass.value_callable = "new value"
         assert example_instance.value_callable == "new value"
         assert ExampleClass.value_callable == "new value"
-
-class ExampleClass:
-    valuename = property()
-
-print(ExampleClass.valuename.__dict__["__name__"])
