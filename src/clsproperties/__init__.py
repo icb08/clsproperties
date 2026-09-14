@@ -89,7 +89,7 @@ class classproperty:
 
         This method instantiates a `classproperty` descriptor, defining the getter, setter and deleter functions.
 
-        For detailed information on usage and implementation, vi ew the [Documentation](https://icb08.github.io/clsproperties/v1.0.0/reference/classes/classproperty/).
+        For detailed information on usage and implementation, view the [Documentation](https://icb08.github.io/clsproperties/v1.0.0/reference/classes/classproperty/).
         
         ---
 
