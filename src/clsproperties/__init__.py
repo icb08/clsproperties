@@ -48,6 +48,14 @@ __author__ = "Isaac Bell"
 __version__ = "1.0.0"
 __all__ = ["classproperty", "ClassPropertyMeta"]
 
+def _get_classproperty(obj: object, name: str) -> classproperty | None:
+    cls = obj if isinstance(obj, type) else type(obj)
+    for base in cls.__mro__:
+        if name in base.__dict__:
+            attr = base.__dict__[name]
+            return attr if isinstance(attr, classproperty) else None
+    return None
+
 class classproperty:
     """
     Class property object.
@@ -112,19 +120,18 @@ class classproperty:
         self.__owner__ = owner
         self.__name__ = name
     
-    def __get__(self, instance: object | None, cls: type[Any] | None = None) -> Any:
-        if cls is None: cls = type(instance)
-        if self.fget is None: raise AttributeError(f"classproperty '{self.__name__}' of '{cls.__name__}' class {'' if cls == self.__owner__ else ''} has no getter.")
+    def __get__(self, instance: object | None, cls: type[Any]) -> Any:
+        if self.fget is None: raise AttributeError(f"classproperty '{self.__name__}' of the '{cls.__name__}' class {'' if cls == self.__owner__ else f'(inherited from the \'{self.__owner__.__name__}\' class)'} has no getter.")
         return self.fget(cls)
     
-    def __set__(self, instance: object, value: Any) -> None:
-        cls = type(instance)
-        if self.fset is None: raise AttributeError(f"classproperty '{self.__name__}' of '{cls.__name__}' class has no setter.")
+    def __set__(self, obj: object, value: Any) -> None:
+        cls = obj if isinstance(obj, type) else type(obj)
+        if self.fset is None: raise AttributeError(f"classproperty '{self.__name__}' of the '{cls.__name__}' class {'' if cls == self.__owner__ else f'(inherited from the \'{self.__owner__.__name__}\' class)'} has no setter.")
         self.fset(cls, value)
     
-    def __delete__(self, instance: object) -> None:
-        cls = type(instance)
-        if self.fdel is None: raise AttributeError(f"classproperty '{self.__name__}' of '{cls.__name__}' class has no deleter.")
+    def __delete__(self, obj: object) -> None:
+        cls = obj if isinstance(obj, type) else type(obj)
+        if self.fdel is None: raise AttributeError(f"classproperty '{self.__name__}' of the '{cls.__name__}' class {'' if cls == self.__owner__ else f'(inherited from the \'{self.__owner__.__name__}\' class)'} has no deleter.")
         self.fdel(cls)
     
     def getter(self, fget: Callable[..., Any]) -> Self:
@@ -207,15 +214,11 @@ class ClassPropertyMeta(type):
     """
 
     def __setattr__(cls, name: str, value: Any) -> None:
-        attr = cls.__dict__.get(name)
-        if isinstance(attr, classproperty):
-            if attr.fset is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no setter.")
-            attr.fset(cls, value)
-        super().__setattr__(name, value)
+        attr = _get_classproperty(cls, name)
+        if isinstance(attr, classproperty): attr.__set__(cls, value)
+        else: super().__setattr__(name, value)
 
-    def __delattr__(cls, name):
-        attr = cls.__dict__.get(name)
-        if isinstance(attr, classproperty):
-            if attr.fdel is None: raise AttributeError(f"Class property '{name}' of '{cls}' object has no deleter.")
-            attr.fdel(cls)
-        super().__delattr__(name)
+    def __delattr__(cls, name: str) -> None:
+        attr = _get_classproperty(cls, name)
+        if isinstance(attr, classproperty): attr.__delete__(cls)
+        else: super().__delattr__(name)
