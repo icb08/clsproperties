@@ -85,11 +85,40 @@ class classproperty:
     > Define the deleter function of the `classproperty` object.
     """
 
+    class _Reference:
+        
+                def __init__(self, obj: object, name: str, *, attr_error: bool = True):
+                    self._obj = obj
+                    self._name = name
+                    self._classproperty = _get_classproperty(obj, name)
+    
+                def get(self) -> classproperty | None:
+                    pass
+    
+                def set(self, value: Any, *, replace_inherited: bool = False) -> None:
+                    pass
+    
+                def delete(self) -> None:
+                    pass
+    
+                def getter(self, fget):
+                    pass
+ 
+    class _Override:
+    
+            def __call__(self, obj: object, name: str) -> classproperty._Reference:
+                return classproperty._Reference(obj, name)
+
+            @staticmethod
+            def get(obj: object, name: str) -> classproperty | None:
+                return classproperty._Reference(obj, name).get()
+
     __owner__: type[Any]
     __name__: str
     fget: Callable[[type[Any]], Any] | None
     fset: Callable[[type[Any],Any], None] | None
     fdel: Callable[[type[Any]], None] | None
+    override: _Override = _Override()
     
     def __init__(self, fget: Callable[..., Any] | None = None, fset: Callable[..., Any] | None = None, fdel: Callable[..., Any] | None = None, doc: str | None = None) -> None:
         """
