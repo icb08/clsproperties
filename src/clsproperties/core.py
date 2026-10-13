@@ -1,5 +1,5 @@
 """
-Core implementation of the `clsproperties` library.
+Basic implementation of the `clsproperties` library.
 
 FINISH
 """
