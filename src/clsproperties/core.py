@@ -4,30 +4,31 @@ Basic implementation of the `clsproperties` library.
 FINISH
 """
 
-from __future__ import annotations # Required for Python 3.11 - 3.13. For Python 3.14+, built-in. Enables lazy annotations (type hints are evaluated as strings at compile time until runtime, allowing for forward references with circular dependencies).
+# Enables lazy annotations (type hints are evaluated as strings at compile time until runtime, allowing for forward references with circular dependencies) - Required for Python 3.12 - 3.13. For Python 3.14+, built-in.
+from __future__ import annotations
 
 # Defines a module dunder attribute specifying the public API for wildcard imports.
-__all__ = ["classproperty", "ClassPropertyMeta"]
+__all__ = ["classproperty", "ClassPropertyMetaClass"]
 
 # Imports built-in Python libraries.
-from collections.abc import Callable
-from typing import Any, Self, TypeAlias  # TypeAlias required for Python 3.11. For Python 3.12+, use type keyword.
+from typing import Self, Callable, Any
+from types import EllipsisType, MappingProxyType # In Python 3.15+, use _NONE = sentinel("_NONE") for default values, instead of ... (type EllipsisType).
 
-# Defines types for type hinting - TypeAlias required for Python 3.11. For Python 3.12+, use type keyword.
-_ClassPropertyGetMethod: TypeAlias = Callable[[type[Any]], Any] | classmethod | staticmethod
-_ClassPropertySetMethod: TypeAlias = Callable[[type[Any], Any], None] | classmethod | staticmethod
-_ClassPropertyDelMethod: TypeAlias = Callable[[type[Any]], None] | classmethod | staticmethod
+# Defines type aliases that specify the requirements for classproperty accessor methods.
+type ClassPropertyGetter[Cls, GetValue] = Callable[[type[Cls]], GetValue] | classmethod[Cls, [], GetValue] | staticmethod[[], GetValue]
+type ClassPropertySetter[Cls, SetValue] = Callable[[type[Cls], SetValue], None] | classmethod[Cls, [SetValue], None] | staticmethod[[SetValue], None]
+type ClassPropertyDeleter[Cls] = Callable[[type[Cls]], None] | classmethod[Cls, [], None] | staticmethod[[], None]
 
-# Defines a helper function to get a classproperty descriptor from an object's attribute lookup process. FINISH
-def _get_classproperty(obj: object, name: str) -> classproperty | None:
-    cls = obj if isinstance(obj, type) else type(obj)
-    for base in cls.__mro__:
-        if name in base.__dict__:
-            attr = base.__dict__[name]
-            return attr if isinstance(attr, classproperty) else None
-    return None
+# Defines a helper function to get a classproperty data descriptor from an object's attribute lookup process.
+def _get_classproperty[Cls](obj: type[Cls] | Cls, name: str) -> tuple[classproperty[Cls, Any, Any] | None, type[Any] | None]:
+    cls: type[Cls] = obj if isinstance(obj, type) else type(obj)
+    mro: tuple[type[Any], ...] = type.__getattribute__(cls, "__mro__")  # Required for no recursion in ClassPropertyMetaClass __getattribute__ method (can't do cls.__mro__).
+    for base in mro:
+        namespace: MappingProxyType[str, Any] = type.__getattribute__(base, "__dict__")  # Required for no recursion in ClassPropertyMetaClass __getattribute__ method (can't do base.__dict__ if base is cls).
+        if name in namespace: return (attr, base) if isinstance((attr:=namespace[name]), classproperty) else (None, None)
+    return None, None
 
-# Defines a helper metaclass for the classproperty class. FINISH
+# Defines a private metaclass for the classproperty class, that provides access to the override and update functionality via the class.
 class _Meta(type):
 
     @property
@@ -48,8 +49,8 @@ class _Meta(type):
         """
         return _Update()
 
-# Defines the classproperty class.
-class classproperty(metaclass=_Meta):
+# Defines the classproperty class, that provides controlled access to class attributes.
+class classproperty[Cls, GetValue, SetValue](metaclass=_Meta):
     """
     Class property object.
 
@@ -78,13 +79,13 @@ class classproperty(metaclass=_Meta):
     > Define the deleter function of the `classproperty` object.
     """
     
-    def __init__(self, fget: _ClassPropertyGetMethod | None = None, fset: _ClassPropertySetMethod | None = None, fdel: _ClassPropertyDelMethod | None = None, doc: str | None = None) -> None:
+    def __init__(self, fget: ClassPropertyGetter[Cls, GetValue] | None = None, fset: ClassPropertySetter[Cls, SetValue] | None = None, fdel: ClassPropertyDeleter[Cls] | None = None, doc: str | None | EllipsisType = ...) -> None:
         """
         Instantiate a `classproperty` object.
 
         This method instantiates a `classproperty` descriptor, defining the getter, setter and deleter functions.
 
-        For detailed information on usage and implementation, view the [Documentation](https://icb08.github.io/clsproperties/v1.0.0/reference/classes/classproperty/).
+        For detailed information on implementation, view the [Documentation](https://icb08.github.io/clsproperties/v1.0.0/reference/classes/classproperty/).
         
         ---
 
@@ -98,54 +99,41 @@ class classproperty(metaclass=_Meta):
         - **doc** (optional) : *str* (default = None)
         > Optional docstring for the `classproperty` object.
         """
-        self.fget: _ClassPropertyGetMethod | None = fget
-        self.fset: _ClassPropertySetMethod | None = fset
-        self.fdel: _ClassPropertyDelMethod | None = fdel
-        self.__doc__: str | None = doc if doc is not None else ((self.fget.__func__ if isinstance(self.fget, (classmethod, staticmethod)) else self.fget).__doc__ if self.fget is not None else None)
+        self.fget: ClassPropertyGetter[Cls, GetValue] | None = fget
+        self.fset: ClassPropertySetter[Cls, SetValue] | None = fset
+        self.fdel: ClassPropertyDeleter[Cls] | None = fdel
+        fget_func = self._get_function("fget")
+        self._get_function("fset")
+        self._get_function("fdel")
+        self._doc: bool = doc is not ...
+        self.__doc__: str | None = doc if doc is not ... else getattr(fget_func, "__doc__", None)
 
-    def __set_name__(self, owner: type[Any], name: str) -> None:
-        self.__owner__: type[Any] = owner
+    def __set_name__(self, owner: type[Cls], name: str) -> None:
+        self.__owner__: type[Cls] = owner
         self.__name__: str = name
 
-    def __get__(self, instance: object | None, cls: type[Any]) -> Any:
-        func = self.fget
-        if func is None:
-            if hasattr(self, "__name__") and hasattr(self, "__owner__"):
-                inherited = " " if cls is self.__owner__ else f" (inherited from class '{self.__owner__.__name__}') "
-                raise AttributeError(f"classproperty '{self.__name__}' of class '{cls.__name__}'{inherited}has no getter.")
-            else:
-                raise AttributeError(f"classproperty of class '{cls.__name__}' has no getter.")
-        elif isinstance(func, staticmethod): return func.__func__()
-        elif isinstance(func, classmethod): return func.__func__(cls)
+    def __get__(self, instance: Cls | EllipsisType | None, cls: type[Cls]) -> GetValue | Self:
+        if instance is None: return self
+        func = self._get_function("fget", self.fget)
+        if func is None: raise AttributeError(f"classproperty{f" '{self.__name__}' " if hasattr(self, "__name__") else " "}of class '{cls.__name__}'{f" (inherited from class '{self.__owner__.__name__}') " if hasattr(self, "__owner__") and cls is not self.__owner__ else " "}has no getter.")
+        elif isinstance(self.fget, staticmethod): return func()
         else: return func(cls)
-
-    def __set__(self, obj: object, value: Any) -> None:
-        cls = obj if isinstance(obj, type) else type(obj)
-        func = self.fset
-        if func is None:
-                    if hasattr(self, "__name__") and hasattr(self, "__owner__"):
-                        inherited = " " if cls is self.__owner__ else f" (inherited from class '{self.__owner__.__name__}') "
-                        raise AttributeError(f"classproperty '{self.__name__}' of class '{cls.__name__}'{inherited}has no setter.")
-                    else:
-                        raise AttributeError(f"classproperty of class '{cls.__name__}' has no setter.")
-        elif isinstance(func, staticmethod): func.__func__(value)
-        elif isinstance(func, classmethod): func.__func__(cls, value)
+ 
+    def __set__(self, obj: Cls | type[Cls], value: SetValue) -> None:
+        cls: type[Cls]  = obj if isinstance(obj, type) else type(obj)
+        func = self._get_function("fset")
+        if func is None: raise AttributeError(f"classproperty{f" '{self.__name__}' " if hasattr(self, "__name__") else " "}of class '{cls.__name__}'{f" (inherited from class '{self.__owner__.__name__}') " if hasattr(self, "__owner__") and cls is not self.__owner__ else " "}has no setter.")
+        elif isinstance(self.fset, staticmethod): func(value)
         else: func(cls, value)
     
-    def __delete__(self, obj: object) -> None:
-        cls = obj if isinstance(obj, type) else type(obj)
-        func = self.fdel
-        if func is None:
-                    if hasattr(self, "__name__") and hasattr(self, "__owner__"):
-                        inherited = " " if cls is self.__owner__ else f" (inherited from class '{self.__owner__.__name__}') "
-                        raise AttributeError(f"classproperty '{self.__name__}' of class '{cls.__name__}'{inherited}has no deleter.")
-                    else:
-                        raise AttributeError(f"classproperty of class '{cls.__name__}' has no deleter.")
-        elif isinstance(func, staticmethod): func.__func__()
-        elif isinstance(func, classmethod): func.__func__(cls)
+    def __delete__(self, obj: Cls | type[Cls]) -> None:
+        cls: type[Cls] = obj if isinstance(obj, type) else type(obj)
+        func = self._get_function("fdel")
+        if func is None: raise AttributeError(f"classproperty{f" '{self.__name__}' " if hasattr(self, "__name__") else " "}of class '{cls.__name__}'{f" (inherited from class '{self.__owner__.__name__}') " if hasattr(self, "__owner__") and cls is not self.__owner__ else " "}has no deleter.")
+        elif isinstance(self.fdel, staticmethod): func()
         else: func(cls)
     
-    def getter(self, fget: _ClassPropertyGetMethod | None) -> Self:
+    def getter(self, fget: ClassPropertyGetter[Cls, GetValue] | None) -> Self:
         """
         Define the getter function of the `classproperty` object.
 
@@ -163,9 +151,10 @@ class classproperty(metaclass=_Meta):
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified getter function.
         """
-        return type(self)(fget, self.fset, self.fdel, self.__doc__)
+        self._get_function("fget", fget)
+        return type(self)(fget, self.fset, self.fdel, self.__doc__ if self._doc else ...)
     
-    def setter(self, fset: _ClassPropertySetMethod | None) -> Self:
+    def setter(self, fset: ClassPropertySetter[Cls, SetValue] | None) -> Self:
         """
         Define the setter function of the `classproperty` object.
 
@@ -183,9 +172,10 @@ class classproperty(metaclass=_Meta):
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified setter function.
         """
-        return type(self)(self.fget, fset, self.fdel, self.__doc__)
+        self._get_function("fset", fset)
+        return type(self)(self.fget, fset, self.fdel, self.__doc__ if self._doc else ...)
     
-    def deleter(self, fdel: _ClassPropertyDelMethod | None) -> Self:
+    def deleter(self, fdel: ClassPropertyDeleter[Cls] | None) -> Self:
         """
         Define the deleter function of the `classproperty` object.
 
@@ -203,9 +193,18 @@ class classproperty(metaclass=_Meta):
         - *`classproperty` object*
         > Returns a new `classproperty` object, with the specified deleter function.
         """
-        return type(self)(self.fget, self.fset, fdel, self.__doc__)
+        self._get_function("fdel", fdel)
+        return type(self)(self.fget, self.fset, fdel, self.__doc__ if self._doc else ...)
 
-class ClassPropertyMeta(type):
+    def _get_function(self, name: str, method: ClassPropertyGetter[Cls, GetValue] | ClassPropertySetter[Cls, SetValue] | ClassPropertyDeleter[Cls] | None | EllipsisType = ...) -> Callable[..., Any] | None:
+        if method is ...: method = getattr(self, name, None)
+        if method is None: return None
+        elif isinstance(method, (classmethod, staticmethod)): return method.__func__
+        elif callable(method): return method
+        else: raise TypeError(f"accessor method '{name}' of classproperty{f" '{self.__name__}' " if hasattr(self, "__name__") else " "} must be a callable, classmethod or staticmethod.")
+
+# Defines the ClassPropertyMetaClass metaclass that ensures the setter and deleter accessor methods of classproperty objects execute when accessed via the class.
+class ClassPropertyMetaClass(type):
     """
     Class property metaclass.
 
@@ -224,32 +223,37 @@ class ClassPropertyMeta(type):
     N/A
     """
 
-    def __setattr__(cls, name: str, value: Any) -> None:
-        attr = _get_classproperty(cls, name)
-        if isinstance(attr, classproperty): attr.__set__(cls, value)
-        else: super().__setattr__(name, value)
+    def __getattribute__(cls: type[Any], name: str) -> Any:
+        attr = _get_classproperty(cls, name)[0]
+        if attr is None: return type.__getattribute__(cls, name)
+        else: return attr.__get__(..., cls)
 
-    def __delattr__(cls, name: str) -> None:
-        attr = _get_classproperty(cls, name)
-        if isinstance(attr, classproperty): attr.__delete__(cls)
-        else: super().__delattr__(name)
+    def __setattr__(cls: type[Any], name: str, value: Any) -> None:
+        attr = _get_classproperty(cls, name)[0]
+        if attr is None: type.__setattr__(cls, name, value)
+        else: attr.__set__(cls, value)
 
-class _Reference:
+    def __delattr__(cls: type[Any], name: str) -> None:
+        attr = _get_classproperty(cls, name)[0]
+        if attr is None: type.__delattr__(cls, name)
+        else: attr.__delete__(cls)
 
-    def __init__(self, obj: object, name: str) -> None:
-        self._obj: object = obj
-        self._class: type[Any] = obj if isinstance(obj, type) else type(obj)
+class _Reference[Cls]:
+
+    def __init__(self, obj: Cls | type[Cls], name: str) -> None:
+        self._class: type[Cls] = obj if isinstance(obj, type) else type(obj)
         self._name: str = name
-        _classproperty: classproperty | None = _get_classproperty(obj, name)
-        if isinstance(_classproperty, classproperty): self._classproperty: classproperty = _classproperty
-        else: raise AttributeError(f"object '{obj}' has no classproperty '{name}'.")
+        _classproperty, _owner = _get_classproperty(obj, name)
+        if _classproperty is None or _owner is None: raise AttributeError(f"object '{obj}' has no classproperty '{name}'.")
+        self._classproperty: classproperty[Cls, Any, Any] = _classproperty
+        self._owner: type[Any] = _owner
 
-class _OverrideReference(_Reference):
+class _OverrideReference[Cls](_Reference[Cls]):
 
-    def __init__(self, obj: object, name: str) -> None:
+    def __init__(self, obj: Cls | type[Cls], name: str) -> None:
         super().__init__(obj, name)
     
-    def get(self) -> classproperty:
+    def get(self) -> classproperty[Cls, Any, Any]:
         """
         FINISH
         """
@@ -259,97 +263,108 @@ class _OverrideReference(_Reference):
         """
         FINISH
         """
-        type.__setattr__(self._classproperty.__owner__ if replace_inherited else self._class, self._name, value)
+        type.__setattr__(self._owner if replace_inherited else self._class, self._name, value)
     
     def delete(self) -> None:
         """
         FINISH
         """
-        type.__delattr__(self._classproperty.__owner__, self._name)
+        type.__delattr__(self._owner, self._name)
 
 class _Override:
-    
-    def __call__(self, obj: object, name: str) -> _OverrideReference:
+
+    @staticmethod
+    def __call__[Cls](obj: Cls | type[Cls], name: str) -> _OverrideReference[Cls]:
+        """
+        FINISH
+        """
         return _OverrideReference(obj, name)
 
     @staticmethod
-    def get(obj: object, name: str) -> classproperty:
+    def get[Cls](obj: Cls | type[Cls], name: str) -> classproperty[Cls, Any, Any]:
         """
         FINISH
         """
         return _OverrideReference(obj, name).get()
 
     @staticmethod
-    def set(obj: object, name: str, value: Any, *, replace_inherited: bool = False) -> None:
+    def set[Cls](obj: Cls | type[Cls], name: str, value: Any, *, replace_inherited: bool = False) -> None:
         """
         FINISH
         """
         _OverrideReference(obj, name).set(value, replace_inherited=replace_inherited)
 
     @staticmethod
-    def delete(obj: object, name: str) -> None:
+    def delete[Cls](obj: Cls | type[Cls], name: str) -> None:
         """
         FINISH
         """
         _OverrideReference(obj, name).delete()
 
-class _UpdateReference(_Reference):
+class _UpdateReference[Cls](_Reference[Cls]):
 
-    def __init__(self, obj: object, name: str) -> None:
+    def __init__(self, obj: Cls | type[Cls], name: str) -> None:
         super().__init__(obj, name)
 
-    def getter(self, fget: _ClassPropertyGetMethod | None) -> None:
+    def getter[GetValue](self, fget: ClassPropertyGetter[Cls, GetValue] | None) -> None:
         """
         FINISH
         """
+        func = self._classproperty._get_function("fget", fget)
+        doc: str | None = self._classproperty.__doc__ if self._classproperty._doc else func.__doc__
         self._classproperty.fget = fget
+        self._classproperty.__doc__ = doc
 
-    def setter(self, fset: _ClassPropertySetMethod | None) -> None:
+    def setter[SetValue](self, fset: ClassPropertySetter[Cls, SetValue] | None) -> None:
         """
         FINISH
         """
+        self._classproperty._get_function("fset", fset)
         self._classproperty.fset = fset
 
-    def deleter(self, fdel: _ClassPropertyDelMethod | None) -> None:
+    def deleter(self, fdel: ClassPropertyDeleter[Cls] | None) -> None:
         """
         FINISH
         """
+        self._classproperty._get_function("fdel", fdel)
         self._classproperty.fdel = fdel
 
-    def docstring(self, doc: str | None) -> None:
+    def docstring(self, doc: str | None = None) -> None:
         """
         FINISH
         """
+        self._classproperty._doc = True
         self._classproperty.__doc__ = doc
 
 class _Update:
 
-    def __call__(self, obj: object, name: str) -> _UpdateReference:
+    @staticmethod
+    def __call__[Cls](obj: Cls | type[Cls], name: str) -> _UpdateReference[Cls]:
         return _UpdateReference(obj, name)
     
     @staticmethod
-    def getter(obj: object, name: str, fget: _ClassPropertyGetMethod | None) -> None:
+    def getter[Cls, GetValue](obj: Cls | type[Cls], name: str, fget: ClassPropertyGetter[Cls, GetValue] | None) -> None:
         """
         FINISH
         """
         _UpdateReference(obj, name).getter(fget)
     
     @staticmethod
-    def setter(obj: object, name: str, fset: _ClassPropertySetMethod | None) -> None:
+    def setter[Cls, SetValue](obj: Cls | type[Cls], name: str, fset: ClassPropertySetter[Cls, SetValue] | None) -> None:
         """
         FINISH
         """
         _UpdateReference(obj, name).setter(fset)
     
     @staticmethod
-    def deleter(obj: object, name: str, fdel: _ClassPropertyDelMethod | None) -> None:
+    def deleter[Cls](obj: Cls | type[Cls], name: str, fdel: ClassPropertyDeleter[Cls] | None) -> None:
         """
         FINISH
         """
         _UpdateReference(obj, name).deleter(fdel)
 
     @staticmethod
-    def docstring(obj: object, name: str, doc: str | None) -> None:
+    def docstring[Cls](obj: Cls | type[Cls], name: str, doc: str | None = None) -> None:
         """
         FINISH
         """

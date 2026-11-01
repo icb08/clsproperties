@@ -1,11 +1,13 @@
 # [clsproperties](https://icb08.github.io/clsproperties/)
-- **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.11+](https://www.python.org/downloads/))
+- **Version:** [1.0.0](https://github.com/icb08/clsproperties/releases/tag/v1.0.0) ([Python 3.12+](https://www.python.org/downloads/))
 - **Author:** [Isaac Bell](https://github.com/icb08)
 - **License:** [MIT](https://github.com/icb08/clsproperties/blob/main/LICENSE)
 
 This library provides `classproperty` objects for controlled access to class attributes.
 
 The `classproperty` class aims to emulate the behaviours of Python's built-in `property` class, providing controlled access to class attributes instead of instance attributes. Like `property` objects, `classproperty` objects support use both as a decorator and as a callable. Like `property` objects, `classproperty` objects are descriptors, supporting getter, setter and deleter functions. 
+
+---
 
 ## Links
 
@@ -27,9 +29,7 @@ The `classproperty` class aims to emulate the behaviours of Python's built-in `p
 
 This library is a solo project, developed and maintained by a student, for the purpose of learning Python and the software development environment.
 
-As an open source project, any community contributions are greatly appreciated! Please always be respectful towards others and the project.
-
-Keep in mind that it may take some time for issues and pull requests to be reviewed, and that some requests may be denied due to the strict code and documentation standards I have set for myself. Also, please try to use official issue templates.
+As an open source project, any community contributions are greatly appreciated! However, please always be respectful towards others and the project, and keep in mind that it may take some time for issues and pull requests to be reviewed. To speed up this process, please use the issue templates provided. Also, please note that some requests may be denied due to the strict code and documentation standards I have set for myself and this project.
 
 ### [Issues](https://github.com/icb08/clsproperties/issues)
 

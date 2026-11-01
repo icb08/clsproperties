@@ -4,7 +4,7 @@ authors = [{name = "Isaac Bell"}]
 dynamic = ["version"]
 description = "This library provides classproperty objects for controlled access to class attributes."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = [
@@ -68,20 +68,12 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Software Development",
     "Topic :: Software Development :: Libraries",
-    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = []
 
 [project.urls]
 Homepage = "https://icb08.github.io/clsproperties/"
@@ -96,3 +88,15 @@ path = "src/clsproperties/__init__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = ["/.github"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pytest>=9.2.0",
+    "mkdocs>=1.6.1",
+    "mike>=2.2.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.6.2",
+    "mkdocs-github-admonitions-plugin>=0.1.1",
+    "mkdocs-include-markdown-plugin>=7.3.0",
+    "mkdocs-material>=9.8.0",
+]
