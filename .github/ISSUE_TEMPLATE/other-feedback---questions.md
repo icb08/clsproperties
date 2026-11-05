@@ -2,7 +2,7 @@
 name: Other Feedback / Questions
 about: Document any other feedback or questions you have about the library!
 title: ''
-labels: ''
+labels: question
 assignees: icb08
 
 ---
