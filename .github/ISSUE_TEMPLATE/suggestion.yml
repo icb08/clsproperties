@@ -1,0 +1,70 @@
+name: Suggestion
+description: Share ideas and feedback to help us improve the library!
+type: Feature
+
+labels:
+  - enhancement
+assignees:
+  - icb08
+
+body:
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      description: Please confirm the following before submitting your suggestion.
+      options:
+        - label: I confirm I have read the [Contribution](../../README.md#contribution) information.
+          required: true
+        - label: I confirm I have checked existing issues to ensure this suggestion has not already been shared.
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Suggestion Description
+      description: A clear and concise description of the suggestion.
+      placeholder: e.g. Add docstrings to every class and method explaining how to use them.
+    validations:
+      required: true
+  
+  - type: input
+    id: reference
+    attributes:
+      label: Referenced Issue
+      description: If applicable, list the issue number(s) this suggestion addresses.
+      placeholder: e.g. Addresses issues \#0001 and \#0002
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Description
+      description: If applicable, explain the problem or limitation this suggestion addresses.
+      placeholder: e.g. There is not enough information about how to use each class and method.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: If applicable, explain any alternative solutions you explored and considered.
+      placeholder: e.g. I explored creating a documentation wiki, but that can't be accessed with the `python -h` command.
+    validations:
+      required: false
+
+  - type: upload
+    id: attachments
+    attributes:
+      label: Attachments
+      description: If applicable, attach screenshots or other files to help explain the suggestion.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: If applicable, add any additional information that could be useful for implementing the suggestion.
+    validations:
+      required: false

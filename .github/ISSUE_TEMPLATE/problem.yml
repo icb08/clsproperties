@@ -1,0 +1,97 @@
+name: Problem
+description: Report any bugs or other problems to help us fix the library!
+type: Bug
+
+labels:
+  - bug
+assignees:
+  - icb08
+
+body:
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      description: Please confirm the following before submitting your problem.
+      options:
+        - label: I confirm I have read the [Contribution](../../README.md#contribution) information.
+          required: true
+        - label: I confirm I am using the latest version of the library.
+          required: true
+        - label: I confirm I have checked existing issues to ensure this problem has not already been reported.
+          required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What Python version did this problem occur on?
+      placeholder: e.g. 3.14.10
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: A clear and concise description of the problem.
+      placeholder: e.g. Inherited class properties aren't invoking the accessor methods.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Reproduction Steps
+      description: A simple step-by-step guide on how to reproduce the problem.
+      placeholder: |
+        e.g.
+        1. Define a class called Owner.
+        2. Inside the class, define a classproperty called classprop with a getter method that returns "working".
+        3. Define a class called Child that inherits from Owner.
+        4. print(Child.classprop)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: A clear and concise description of the expected behaviour when completing the reproduction steps.
+      placeholder: e.g. The getter method is invoked, printing `working` to the console.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behaviour
+    attributes:
+      label: Actual Behaviour
+      description: A clear and concise description of the actual behaviour when completing the reproduction steps.
+      placeholder: e.g. The getter method isn't invoked, printing `<__main__.classproperty object at ...>` to the console.
+    validations:
+      required: true
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: If applicable, attach relevant error logs that occur when completing the reproduction steps.
+      render: shell
+    validations:
+      required: false
+
+  - type: upload
+    id: attachments
+    attributes:
+      label: Attachments
+      description: If applicable, attach screenshots or other files (such as a simple reproduction) to help explain the problem.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: If applicable, add any additional information that could be useful for fixing the problem.
+    validations:
+      required: false

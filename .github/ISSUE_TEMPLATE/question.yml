@@ -1,0 +1,45 @@
+name: Question
+description: Ask any inquiries or request clarification about the library!
+type: Question
+
+labels:
+  - question
+assignees:
+  - icb08
+
+body:
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      description: Please confirm the following before submitting your question.
+      options:
+        - label: I confirm I have read the [Contribution](../../README.md#contribution) information.
+          required: true
+        - label: I confirm I have checked the documentation and existing issues to ensure this question is not already answered.
+          required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: A clear and concise description of your question.
+      placeholder: e.g. How can I access a classproperty from an instance of a class?
+    validations:
+      required: true
+
+  - type: upload
+    id: attachments
+    attributes:
+      label: Attachments
+      description: If applicable, attach screenshots or other files to help explain your question.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: If applicable, add any additional information or context that could be useful for answering your question.
+    validations:
+      required: false
