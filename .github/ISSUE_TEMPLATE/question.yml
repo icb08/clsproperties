@@ -14,7 +14,7 @@ body:
       label: Confirmations
       description: Please confirm the following before submitting your question.
       options:
-        - label: I confirm I have read the [Contribution](../../README.md#contribution) information.
+        - label: I confirm I have read the [Contribution](../blob/main/README.md#contribution) information.
           required: true
         - label: I confirm I have checked the documentation and existing issues to ensure this question is not already answered.
           required: true

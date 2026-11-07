@@ -14,7 +14,7 @@ body:
       label: Confirmations
       description: Please confirm the following before submitting your problem.
       options:
-        - label: I confirm I have read the [Contribution](../../README.md#contribution) information.
+        - label: I confirm I have read the [Contribution](../blob/main/README.md#contribution) information.
           required: true
         - label: I confirm I am using the latest version of the library.
           required: true
