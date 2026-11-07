@@ -67,7 +67,7 @@ wheels/
 *.manifest
 *.spec
 
-# Testing
+# Testing / Linting
 .tox/
 .nox/
 htmlcov/
@@ -85,3 +85,7 @@ htmlcov/
 .ipynb_checkpoints
 profile_default/
 ipython_config.py
+
+# Zensical Documentation
+.cache/
+site/
